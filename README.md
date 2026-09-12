@@ -1,161 +1,99 @@
-# Custom Div Box Manager WordPress Plugin
+# WP Updates Plugin
 
-A powerful WordPress plugin that allows you to create, manage, and display custom div boxes with images, titles, and descriptions in a responsive grid layout similar to Google Web Stories.
+> Create polished update cards, organize them with categories, and place them anywhere on your WordPress site with one shortcode.
 
-## Features
+WP Updates Plugin gives you a simple home for product updates, announcements, release notes, news, and featured content. Build cards in WordPress admin, optionally add an image and link, then display a responsive card grid on any page.
 
-### 🧩 Core Features
-- **Admin Dashboard Interface**: Easy-to-use interface in wp-admin for managing div boxes
-- **Image Management**: Upload images via WordPress Media Library
-- **Content Fields**: Title (H2) and Description fields for each box
-- **Live Preview**: Real-time preview as you type or select images
-- **Responsive Grid**: Clean, responsive layout with hover effects
-- **Shortcode & Widget**: Display boxes anywhere on your site
+## Highlights
 
-### 📱 Frontend Display Options
-- **Shortcode**: `[div_box columns="3" show_description="true" limit="6"]`
-- **Widget**: Available in Widgets admin area
-- **Responsive**: Automatically adapts to different screen sizes
-- **Latest First**: Newest boxes appear first by default
-
-### 🎨 Design Features
-- **Google Web Stories Style**: Clean, flat design similar to Google Web Stories
-- **Hover Effects**: Subtle lift effect with shadow and translateY
-- **Rounded Corners**: 14px border radius for modern look
-- **Image Focus**: Image takes top 30% of card height
-- **Theme Integration**: Matches WordPress theme background
+- **Easy card management** — create, edit, preview, and delete update cards from WP Admin.
+- **Category organization** — create reusable categories and assign them to one or more cards.
+- **Flexible shortcode** — show all cards or filter a grid to selected categories.
+- **Media Library support** — select a featured image directly from the WordPress Media Library.
+- **Responsive layout** — use one, two, or three columns; the layout adapts for smaller screens.
+- **Simple defaults** — choose a default label for card buttons in the Settings tab.
 
 ## Installation
 
-1. Upload the `custom-div-box-manager` folder to `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to 'Div Box Manager' in your WordPress admin menu
+1. Upload this plugin folder to `/wp-content/plugins/`, or install it from the WordPress Plugins screen.
+2. Activate **WP Updates Plugin**.
+3. In WordPress admin, open **WP Updates** from the left-hand menu.
 
-## Usage
+## Admin guide
 
-### Admin Dashboard
+The **WP Updates** main page is split into four tabs:
 
-1. **Navigate to Admin**: Go to `Div Box Manager` in your WordPress admin menu
-2. **Add New Box**: Click "Add New" to create your first div box
-3. **Fill Fields**:
-   - **Image**: Click "Select Image" to choose from Media Library
-   - **Title**: Enter your box title (will display as H2)
-   - **Description**: Add your description content
-4. **Live Preview**: See real-time preview as you type
-5. **Save**: Click "Add Div Box" to save
+| Tab | What it does |
+| --- | --- |
+| **All Cards** | Lists every update card. Select **Add Card** to create one, or edit/delete an existing card. |
+| **Categories** | Add and manage category slugs, such as `product-updates` or `company-news`. |
+| **Settings** | Set the default text used for a card button when that card has a link but no custom button label. |
+| **How to Use** | Displays shortcut instructions and shortcode examples inside WordPress. |
 
-### Frontend Display
+### Create an update card
 
-#### Shortcode Usage
-Place the shortcode anywhere in your posts, pages, or widgets:
+1. Go to **WP Updates → All Cards** and choose **Add Card**.
+2. Enter a title and description.
+3. Add one or more categories, separated by commas. You can create categories first from the **Categories** tab.
+4. Optionally select an image, button link, and custom button text.
+5. Select **Save Card**.
 
-```php
-// Basic usage (3 columns, description shown)
+> Categories are saved as lowercase, URL-friendly slugs. For example, `Product Updates` becomes `product-updates`.
+
+## Display cards on your site
+
+Place the `[div_box]` shortcode in a page, post, block, or widget that supports shortcodes.
+
+### Quick examples
+
+```text
 [div_box]
-
-// Custom columns (1, 2, or 3)
-[div_box columns="2"]
-
-// Hide description
-[div_box show_description="false"]
-
-// Limit number of boxes
-[div_box limit="6"]
-
-// Combined options
-[div_box columns="2" show_description="true" limit="4"]
 ```
 
-#### Widget Usage
-1. Go to `Appearance > Widgets` in WordPress admin
-2. Find "Div Box Manager" widget
-3. Drag it to your desired widget area
-4. Configure:
-   - **Title**: Widget title (optional)
-   - **Columns**: 1, 2, or 3 columns
-   - **Show Description**: Toggle description display
-   - **Limit**: Maximum number of boxes to show
+Displays all cards in a three-column grid.
 
-## Admin Interface Features
-
-### Managing Div Boxes
-- **View All**: See all your div boxes in a clean list format
-- **Edit**: Click "Edit" to modify any box in a modal popup
-- **Delete**: Remove boxes with confirmation dialog
-- **Live Preview**: Real-time preview during editing
-
-### Image Management
-- **Media Library Integration**: Full WordPress Media Library support
-- **Image Preview**: See image thumbnails in admin
-- **Remove Images**: Easy removal with dedicated button
-
-## Customization
-
-### CSS Classes
-The plugin uses semantic CSS classes for easy customization:
-
-```css
-.cdbm-container          /* Main container */
-.cdbm-box-card           /* Individual box */
-.cdbm-box-image          /* Image section */
-.cdbm-box-content        /* Content section */
-.cdbm-box-title          /* H2 title */
-.cdbm-box-description    /* Description text */
+```text
+[div_box columns="2" limit="6"]
 ```
 
-### Responsive Breakpoints
-- **Desktop**: 3 columns (1200px+)
-- **Tablet**: 2 columns (768px - 1199px)
-- **Mobile**: 1 column (< 768px)
+Displays up to six cards in two columns.
 
-## Technical Details
-
-### Database Storage
-- Uses WordPress Options API for data storage
-- Efficient sorting by creation date (newest first)
-- Automatic data sanitization and validation
-
-### Performance
-- Lazy loading for images
-- Optimized database queries
-- Minimal CSS/JS footprint
-
-### Browser Support
-- Modern browsers (Chrome, Firefox, Safari, Edge)
-- Responsive design for all devices
-- Accessibility features included
-
-## Shortcode Parameters
-
-| Parameter | Values | Default | Description |
-|-----------|--------|---------|-------------|
-| `columns` | 1, 2, 3 | 3 | Number of columns in grid |
-| `show_description` | true, false | true | Show/hide descriptions |
-| `limit` | number | unlimited | Maximum boxes to display |
-
-## Hooks and Filters
-
-The plugin is built with extensibility in mind. You can customize behavior using WordPress hooks:
-
-```php
-// Modify box data before display
-add_filter('cdbm_box_data', 'my_custom_box_data');
-
-// Customize container classes
-add_filter('cdbm_container_classes', 'my_custom_classes');
+```text
+[div_box categories="product-updates"]
 ```
+
+Displays only cards assigned to `product-updates`.
+
+```text
+[div_box categories="product-updates, company-news" columns="3" show_description="false"]
+```
+
+Displays cards from either listed category, in three columns, without descriptions.
+
+### Shortcode options
+
+| Option | Default | Allowed values | Description |
+| --- | --- | --- | --- |
+| `columns` | `3` | `1`, `2`, `3` | Number of columns in the card grid. |
+| `show_description` | `true` | `true`, `false` | Whether to show card descriptions. |
+| `limit` | `0` | Any positive whole number | Maximum number of cards to display. `0` shows all cards. |
+| `categories` | Empty | One or more category slugs | Comma-separated categories used to filter cards. |
+
+## Category notes
+
+- A card can belong to multiple categories.
+- Category filtering matches cards in **any** supplied category.
+- Removing a category in WP Admin also removes it from cards that use it. WordPress asks for confirmation before doing this.
 
 ## Requirements
 
-- WordPress 5.0 or higher
-- PHP 7.4 or higher
-- Modern browser with JavaScript enabled
+- WordPress 5.0 or later
+- PHP 7.4 or later
 
 ## Support
 
-For support and customization requests, please refer to the plugin documentation or contact the developer.
+For help, begin with the in-plugin **How to Use** tab. Include your WordPress version, PHP version, and the shortcode you are using when reporting an issue.
 
-## Version History
+## License
 
-- **1.0.0**: Initial release with core functionality
-# WP-Updates-Cards
+GPL v2 or later.

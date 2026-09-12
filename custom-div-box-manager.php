@@ -2,14 +2,14 @@
 /**
  * Plugin Name: WP Updates Plugin
  * Description: Create and display searchable update cards grouped with custom categories.
- * Version: 1.1.0
+ * Version: 1.2.0
  * License: GPL v2 or later
  * Text Domain: wp-updates-plugin
  */
 if (!defined('ABSPATH')) { exit; }
 define('CDBM_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('CDBM_PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('CDBM_VERSION', '1.1.0');
+define('CDBM_VERSION', '1.2.0');
 class WP_Updates_Plugin {
     public function __construct() { add_action('plugins_loaded', array($this, 'init')); register_activation_hook(__FILE__, array($this, 'activate')); }
     public function init() {
@@ -23,6 +23,10 @@ class WP_Updates_Plugin {
         wp_localize_script('cdbm-admin-script', 'cdbmAdmin', array('selectImage' => __('Select image', 'wp-updates-plugin'), 'useImage' => __('Use image', 'wp-updates-plugin')));
     }
     public function frontend_assets() { wp_enqueue_style('cdbm-frontend-style', CDBM_PLUGIN_URL . 'assets/css/frontend.css', array(), CDBM_VERSION); }
-    public function activate() { if (get_option('cdbm_div_boxes', null) === null) { add_option('cdbm_div_boxes', array()); } }
+    public function activate() {
+        if (get_option('cdbm_div_boxes', null) === null) { add_option('cdbm_div_boxes', array()); }
+        if (get_option('cdbm_categories', null) === null) { add_option('cdbm_categories', array()); }
+        if (get_option('cdbm_settings', null) === null) { add_option('cdbm_settings', array('default_button_text' => 'Read more')); }
+    }
 }
 new WP_Updates_Plugin();

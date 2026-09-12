@@ -1,6 +1,39 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 class CDBM_Database {
+    public static function get_categories() {
+        $saved = get_option('cdbm_categories', array());
+        $from_boxes = array();
+        foreach (self::get_div_boxes() as $box) { $from_boxes = array_merge($from_boxes, $box['categories']); }
+        $categories = array_unique(array_merge(is_array($saved) ? $saved : array(), $from_boxes));
+        $categories = array_values(array_filter(array_map('sanitize_title', $categories)));
+        sort($categories, SORT_NATURAL | SORT_FLAG_CASE);
+        return $categories;
+    }
+    public static function add_category($category) {
+        $category = sanitize_title($category);
+        if ($category === '') { return false; }
+        $categories = get_option('cdbm_categories', array());
+        $categories = is_array($categories) ? $categories : array();
+        if (!in_array($category, $categories, true)) { $categories[] = $category; update_option('cdbm_categories', $categories); }
+        return $category;
+    }
+    public static function delete_category($category) {
+        $category = sanitize_title($category);
+        $categories = get_option('cdbm_categories', array());
+        $categories = is_array($categories) ? $categories : array();
+        update_option('cdbm_categories', array_values(array_filter($categories, function ($item) use ($category) { return $item !== $category; })));
+        $boxes = self::get_div_boxes();
+        foreach ($boxes as &$box) { $box['categories'] = array_values(array_filter($box['categories'], function ($item) use ($category) { return $item !== $category; })); }
+        unset($box);
+        update_option('cdbm_div_boxes', $boxes);
+    }
+    public static function get_settings() {
+        return wp_parse_args(get_option('cdbm_settings', array()), array('default_button_text' => 'Read more'));
+    }
+    public static function save_settings($data) {
+        update_option('cdbm_settings', array('default_button_text' => sanitize_text_field($data['default_button_text'] ?? 'Read more')));
+    }
     public static function get_div_boxes() {
         $boxes = get_option('cdbm_div_boxes', array()); $boxes = is_array($boxes) ? $boxes : array(); $boxes = array_map(array(__CLASS__, 'normalise_box'), $boxes);
         usort($boxes, function ($a, $b) { return strtotime($b['created_at']) <=> strtotime($a['created_at']); }); return $boxes;
