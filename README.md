@@ -27,7 +27,7 @@ The **WP Updates** main page is split into four tabs:
 | --- | --- |
 | **All Cards** | Lists every update card. Select **Add Card** to create one, or edit/delete an existing card. |
 | **Categories** | Add and manage category slugs, such as `product-updates` or `company-news`. |
-| **Settings** | Set the default text used for a card button when that card has a link but no custom button label. |
+| **Settings** | Set the default button text and choose whether card links open in a new tab. |
 | **How to Use** | Displays shortcut instructions and shortcode examples inside WordPress. |
 
 ### Create an update card

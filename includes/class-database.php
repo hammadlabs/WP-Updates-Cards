@@ -29,10 +29,10 @@ class CDBM_Database {
         update_option('cdbm_div_boxes', $boxes);
     }
     public static function get_settings() {
-        return wp_parse_args(get_option('cdbm_settings', array()), array('default_button_text' => 'Read more'));
+        return wp_parse_args(get_option('cdbm_settings', array()), array('default_button_text' => 'Read more', 'button_new_tab' => false));
     }
     public static function save_settings($data) {
-        update_option('cdbm_settings', array('default_button_text' => sanitize_text_field($data['default_button_text'] ?? 'Read more')));
+        update_option('cdbm_settings', array('default_button_text' => sanitize_text_field($data['default_button_text'] ?? 'Read more'), 'button_new_tab' => !empty($data['button_new_tab'])));
     }
     public static function get_div_boxes() {
         $boxes = get_option('cdbm_div_boxes', array()); $boxes = is_array($boxes) ? $boxes : array(); $boxes = array_map(array(__CLASS__, 'normalise_box'), $boxes);
@@ -42,6 +42,13 @@ class CDBM_Database {
     public static function save_div_box($data) {
         $boxes = self::get_div_boxes(); $existing = !empty($data['id']) ? self::get_div_box($data['id']) : null; $data['id'] = $existing ? $existing['id'] : wp_generate_uuid4(); $data['created_at'] = $existing ? $existing['created_at'] : current_time('mysql'); $data['updated_at'] = current_time('mysql'); $box = self::normalise_box($data);
         if ($box['title'] === '' || $box['description'] === '') { return false; } $replaced = false; foreach ($boxes as $i => $stored) { if ($stored['id'] === $box['id']) { $boxes[$i] = $box; $replaced = true; break; } } if (!$replaced) { $boxes[] = $box; } update_option('cdbm_div_boxes', $boxes); return $box['id'];
+    }
+    public static function duplicate_div_box($id) {
+        $box = self::get_div_box($id);
+        if (!$box) { return false; }
+        unset($box['id'], $box['created_at'], $box['updated_at']);
+        $box['title'] = sprintf(__('Copy of %s', 'wp-updates-plugin'), $box['title']);
+        return self::save_div_box($box);
     }
     public static function delete_div_box($id) { $boxes = self::get_div_boxes(); $remaining = array_values(array_filter($boxes, function ($box) use ($id) { return !hash_equals($box['id'], (string) $id); })); if (count($remaining) === count($boxes)) { return false; } update_option('cdbm_div_boxes', $remaining); return true; }
     private static function normalise_box($data) {

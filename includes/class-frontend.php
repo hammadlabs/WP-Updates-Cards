@@ -19,7 +19,7 @@ class CDBM_Frontend {
         if ($box['image_url']) { $html .= '<div class="cdbm-box-image"><img src="' . esc_url($box['image_url']) . '" alt="' . esc_attr($box['title']) . '" loading="lazy"></div>'; }
         $html .= '<div class="cdbm-box-content"><h2 class="cdbm-box-title">' . esc_html($box['title']) . '</h2>';
         if ($show_description) { $html .= '<div class="cdbm-box-description">' . wp_kses_post(wpautop($box['description'])) . '</div>'; }
-        if ($box['button_url']) { $settings = CDBM_Database::get_settings(); $text = $box['button_text'] ? $box['button_text'] : $settings['default_button_text']; $html .= '<p class="cdbm-box-action"><a class="cdbm-button" href="' . esc_url($box['button_url']) . '">' . esc_html($text) . '</a></p>'; }
+        if ($box['button_url']) { $settings = CDBM_Database::get_settings(); $text = $box['button_text'] ? $box['button_text'] : $settings['default_button_text']; $target = !empty($settings['button_new_tab']) ? ' target="_blank" rel="noopener noreferrer"' : ''; $html .= '<p class="cdbm-box-action"><a class="cdbm-button" href="' . esc_url($box['button_url']) . '"' . $target . '>' . esc_html($text) . '</a></p>'; }
         return $html . '</div></article>';
     }
 }
