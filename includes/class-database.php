@@ -41,7 +41,8 @@ class CDBM_Database {
     public static function get_div_box($id) { foreach (self::get_div_boxes() as $box) { if (hash_equals($box['id'], (string) $id)) { return $box; } } return null; }
     public static function save_div_box($data) {
         $boxes = self::get_div_boxes(); $existing = !empty($data['id']) ? self::get_div_box($data['id']) : null; $data['id'] = $existing ? $existing['id'] : wp_generate_uuid4(); $data['created_at'] = $existing ? $existing['created_at'] : current_time('mysql'); $data['updated_at'] = current_time('mysql'); $box = self::normalise_box($data);
-        if ($box['title'] === '' || $box['description'] === '') { return false; } $replaced = false; foreach ($boxes as $i => $stored) { if ($stored['id'] === $box['id']) { $boxes[$i] = $box; $replaced = true; break; } } if (!$replaced) { $boxes[] = $box; } update_option('cdbm_div_boxes', $boxes); return $box['id'];
+        $description_length = function_exists('mb_strlen') ? mb_strlen($box['description']) : strlen($box['description']);
+        if ($box['title'] === '' || $box['description'] === '' || $description_length > 500) { return false; } $replaced = false; foreach ($boxes as $i => $stored) { if ($stored['id'] === $box['id']) { $boxes[$i] = $box; $replaced = true; break; } } if (!$replaced) { $boxes[] = $box; } update_option('cdbm_div_boxes', $boxes); return $box['id'];
     }
     public static function duplicate_div_box($id) {
         $box = self::get_div_box($id);

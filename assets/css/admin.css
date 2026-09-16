@@ -67,7 +67,7 @@
 .cdbm-live-preview { background: #eff6fb; border: 1px solid #d6e6f2; border-radius: 14px; box-shadow: none; padding: 14px; }
 .cdbm-editor-page .cdbm-preview-card { border-radius: 10px; box-shadow: 0 5px 18px rgba(21, 51, 80, .12); }
 .cdbm-editor-page .cdbm-preview-card:hover { transform: none; }
-.cdbm-editor-page .cdbm-preview-image { background: linear-gradient(135deg, #1d4f78, #3f89b8); height: 190px; }
+.cdbm-editor-page .cdbm-preview-image { aspect-ratio: 16 / 9; background: linear-gradient(135deg, #1d4f78, #3f89b8); height: auto; overflow: hidden; }
 .cdbm-editor-page .cdbm-preview-image .dashicons { color: rgba(255,255,255,.86); font-size: 44px; height: 44px; width: 44px; }
 .cdbm-editor-page .cdbm-preview-content { padding: 21px; }
 .cdbm-editor-page .cdbm-preview-category { color: #2271b1; display: block; font-size: 11px; font-weight: 700; letter-spacing: .075em; margin-bottom: 10px; text-transform: uppercase; }
@@ -119,7 +119,8 @@
 
 .cdbm-preview-image {
     width: 100%;
-    height: 120px;
+    aspect-ratio: 16 / 9;
+    height: auto;
     background: #f5f5f5;
     display: flex;
     align-items: center;
@@ -187,6 +188,7 @@
 .cdbm-box-preview .cdbm-preview-image {
     width: 120px;
     height: 80px;
+    aspect-ratio: auto;
     flex-shrink: 0;
     border-radius: 8px;
     overflow: hidden;
@@ -368,6 +370,7 @@
     .cdbm-box-preview .cdbm-preview-image {
         width: 100%;
         height: 120px;
+        aspect-ratio: auto;
     }
     
     .cdbm-modal-content {

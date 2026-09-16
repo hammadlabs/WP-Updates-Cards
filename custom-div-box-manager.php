@@ -22,7 +22,10 @@ class WP_Updates_Plugin {
         wp_enqueue_media(); wp_enqueue_style('cdbm-admin-style', CDBM_PLUGIN_URL . 'assets/css/admin.css', array(), CDBM_VERSION); wp_enqueue_script('cdbm-admin-script', CDBM_PLUGIN_URL . 'assets/js/admin.js', array('jquery'), CDBM_VERSION, true);
         wp_localize_script('cdbm-admin-script', 'cdbmAdmin', array('selectImage' => __('Select image', 'wp-updates-plugin'), 'useImage' => __('Use image', 'wp-updates-plugin')));
     }
-    public function frontend_assets() { wp_enqueue_style('cdbm-frontend-style', CDBM_PLUGIN_URL . 'assets/css/frontend.css', array(), CDBM_VERSION); }
+    public function frontend_assets() {
+        wp_enqueue_style('cdbm-frontend-style', CDBM_PLUGIN_URL . 'assets/css/frontend.css', array(), CDBM_VERSION);
+        wp_enqueue_script('cdbm-frontend-script', CDBM_PLUGIN_URL . 'assets/js/frontend.js', array('jquery'), CDBM_VERSION, true);
+    }
     public function activate() {
         if (get_option('cdbm_div_boxes', null) === null) { add_option('cdbm_div_boxes', array()); }
         if (get_option('cdbm_categories', null) === null) { add_option('cdbm_categories', array()); }
