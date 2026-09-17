@@ -6,13 +6,17 @@ jQuery(function ($) {
 
     function updatePreview() {
         var title = $('#cdbm-title').val() || 'Your update title';
-        var description = $('#cdbm-description').val() || 'Your update description will appear here.';
+        var $description = $('#cdbm-description');
+        var description = $description.val() || '';
+        var maxLength = parseInt($description.attr('maxlength'), 10) || 500;
+        var remaining = Math.max(0, maxLength - description.length);
         var category = ($('#cdbm-categories').val().split(',')[0] || 'Your update').trim();
         var buttonText = $('#cdbm-button-text').val() || $('#cdbm-button-text').attr('placeholder');
         $('#cdbm-live-title').text(title);
-        $('#cdbm-live-description').text(description);
+        $('#cdbm-live-description').text(description.slice(0, maxLength) || 'Your update description will appear here.');
         $('#cdbm-live-category').text(category);
         $('#cdbm-live-button').text(buttonText).toggleClass('is-hidden', !$('#cdbm-button-url').val());
+        $('#cdbm-description-count').text(remaining + (remaining === 1 ? ' character remaining.' : ' characters remaining.'));
     }
 
     $('#cdbm-title, #cdbm-description, #cdbm-categories, #cdbm-button-url, #cdbm-button-text').on('input change', updatePreview);
