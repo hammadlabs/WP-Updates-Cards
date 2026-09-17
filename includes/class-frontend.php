@@ -1,7 +1,7 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 class CDBM_Frontend {
-    public function __construct() { add_shortcode('div_box', array($this, 'shortcode')); }
+    public function __construct() { add_shortcode('div_box', array($this, 'shortcode')); add_filter('the_content', array($this, 'single_card_content')); }
     public function shortcode($atts) {
         $atts = shortcode_atts(array('columns' => 3, 'show_description' => 'true', 'limit' => 0, 'categories' => '', 'category' => '', 'categoris' => ''), $atts, 'div_box');
         $columns = min(3, max(1, absint($atts['columns']))); $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN); $limit = absint($atts['limit']);
@@ -25,5 +25,14 @@ class CDBM_Frontend {
         if ($show_description) { $html .= '<div class="cdbm-box-description">' . wp_kses_post(wpautop($box['description'])) . '</div>'; }
         if ($box['button_url']) { $settings = CDBM_Database::get_settings(); $text = $box['button_text'] ? $box['button_text'] : $settings['default_button_text']; $target = !empty($settings['button_new_tab']) ? ' target="_blank" rel="noopener noreferrer"' : ''; $html .= '<p class="cdbm-box-action"><a class="cdbm-button" href="' . esc_url($box['button_url']) . '"' . $target . '>' . esc_html($text) . '</a></p>'; }
         return $html . '</div></div>';
+    }
+    public function single_card_content($content) {
+        if (is_admin() || !is_singular(CDBM_CARD_POST_TYPE) || !in_the_loop() || !is_main_query()) { return $content; }
+        $box = CDBM_Database::get_div_box_by_post_id(get_the_ID());
+        if (!$box || empty($box['button_url'])) { return $content; }
+        $settings = CDBM_Database::get_settings();
+        $text = $box['button_text'] ? $box['button_text'] : $settings['default_button_text'];
+        $target = !empty($settings['button_new_tab']) ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return $content . '<p class="cdbm-box-action"><a class="cdbm-button" href="' . esc_url($box['button_url']) . '"' . $target . '>' . esc_html($text) . '</a></p>';
     }
 }
